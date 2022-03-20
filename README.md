@@ -18,6 +18,20 @@ git clone https://github.com/nuetoban/pod-lifetime-limiter.git
 helm install pod-lifetime-limiter ./pod-lifetime-limiter/helm -n kube-system
 ```
 
+# Basic usage
+
+You can patch your deployments or pods via kubectl.
+
+```shell
+kubectl patch deployment YOUR-DEPLOYMENT --type json \
+    -p='[{"op": "add", "path": "/spec/template/metadata/labels/pod.kubernetes.io~1lifetime", "value": "86400"}]'
+```
+
+```shell
+kubectl patch pod YOUR-POD --type json \
+    -p='[{"op": "add", "path": "/metadata/labels/pod.kubernetes.io~1lifetime", "value": "86400"}]'
+```
+
 ---
 
 This project is inspired by https://github.com/ptagr/pod-reaper.
