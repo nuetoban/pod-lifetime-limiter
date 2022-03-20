@@ -10,6 +10,14 @@ Candidates to delete are determined by the following approach:
 3. It compares (start time + label value) to current time.
 4. If the first expression is less than second, the pod will be deleted.
 
+# Installation
+
+The operator can be installed via Helm.
+```shell
+git clone https://github.com/nuetoban/pod-lifetime-limiter.git
+helm install pod-lifetime-limiter ./pod-lifetime-limiter/helm -n kube-system
+```
+
 ---
 
 This project is inspired by https://github.com/ptagr/pod-reaper.
