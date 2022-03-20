@@ -1,7 +1,7 @@
 Pod Lifetime Limiter
 ---
 
-👋 Hi! So you deal with a crappy application which stops working after some period of time
+Hi! 👋 So you deal with a crappy application which stops working after some period of time
 and you want to restart it every N hours instead of fixing bugs? You found the right
 repository!
 
