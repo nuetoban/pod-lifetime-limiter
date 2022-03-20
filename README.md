@@ -1,7 +1,11 @@
 Pod Lifetime Limiter
 ---
 
-This program restarts all pods which has a label `pod.kubernetes.io/lifetime`.
+👋 Hi! So you deal with a crappy application which stops working after some period of time
+and you want to restart it every N hours instead of fixing bugs? You found the right
+repository!
+
+This program deletes all pods which has a label `pod.kubernetes.io/lifetime`.
 Label value should be in seconds, like `pod.kubernetes.io/lifetime=86400` - 24 hours.
 Candidates to delete are determined by the following approach:
 
