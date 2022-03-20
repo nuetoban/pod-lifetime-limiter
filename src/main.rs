@@ -14,7 +14,7 @@ Candidates to delete are determined by the following approach:
 1. The operator iterates over all containers inside the pod.
 2. It founds the container with maximum lifetime.
 3. It compares (start time + label value) to current time.
-4. If the first expression is greater than second, the pod will be deleted.";
+4. If the first expression is less than second, the pod will be deleted.";
 const SLEEP_SECONDS: u64 = 10;
 
 #[tokio::main]
