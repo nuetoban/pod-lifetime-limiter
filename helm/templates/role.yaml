@@ -1,8 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: pod-manipulator
-  namespace: default
+  name: {{ include "pod-lifetime-limiter.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups: [""]
   resources: ["pods"]
@@ -13,13 +13,13 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: pod-manipulator
+  name: {{ include "pod-lifetime-limiter.fullname" . }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "pod-lifetime-limiter.serviceAccountName" . }}
   apiGroup: ""
-  namespace: default
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: pod-manipulator
+  name: {{ include "pod-lifetime-limiter.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
