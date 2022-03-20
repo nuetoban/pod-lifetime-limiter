@@ -61,22 +61,24 @@ async fn main() -> anyhow::Result<()> {
             .map(|pod| (pod.name(), pod.namespace()));
 
         // Delete pods
+        let mut deleted_pods_count = 0;
         for pod in pods_to_delete {
             let pods_api_namespaced: Api<Pod>;
-            match pod.1 {
+            match pod.clone().1 {
                 Some(v) => pods_api_namespaced = Api::namespaced(client.clone(), &v),
                 None => pods_api_namespaced = Api::default_namespaced(client.clone()),
             }
-            tracing::info!("Deleting pod {}", pod.0);
+            tracing::info!("Deleting pod {:?}/{}", pod.1, pod.0);
             pods_api_namespaced
                 .delete(pod.0.as_str(), &DeleteParams::default())
                 .await?
                 .map_left(|pdel| {
                     assert_eq!(pdel.name(), pod.0);
                 });
+            deleted_pods_count += 1;
         }
 
-        tracing::info!("Sleeping {} second", SLEEP_SECONDS);
+        tracing::info!("Sleeping {} second; deleted {} pods", SLEEP_SECONDS, deleted_pods_count);
         sleep(Duration::from_secs(SLEEP_SECONDS)).await;
     }
 }
