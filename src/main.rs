@@ -78,7 +78,11 @@ async fn main() -> anyhow::Result<()> {
             deleted_pods_count += 1;
         }
 
-        tracing::info!("Sleeping {} second; deleted {} pods", SLEEP_SECONDS, deleted_pods_count);
+        tracing::info!(
+            "Sleeping {} second; deleted {} pods",
+            SLEEP_SECONDS,
+            deleted_pods_count
+        );
         sleep(Duration::from_secs(SLEEP_SECONDS)).await;
     }
 }
