@@ -7,6 +7,9 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "watch", "list", "delete"]
+- apiGroups: ["de3.me"]
+  resources: ["podlifetimelimits"]
+  verbs: ["get", "watch", "list", "delete"]
 
 ---
 

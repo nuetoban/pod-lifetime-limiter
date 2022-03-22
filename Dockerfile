@@ -8,7 +8,7 @@ WORKDIR /build
 
 COPY ./ .
 
-RUN cargo build --target x86_64-unknown-linux-musl --release -j 16
+RUN cargo build --target x86_64-unknown-linux-musl --release -j 8 --bin pod-lifetime-limiter
 
 FROM alpine:3.15.1
 

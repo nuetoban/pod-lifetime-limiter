@@ -16,3 +16,11 @@ tracing-subscriber = "0.3"
 tracing = "0.1"
 openssl = { version = "0.10.32", features = ["vendored"] }
 openssl-sys = "0.9.72"
+serde_yaml = "0.8.23"
+schemars = { version = "0.8.8", features = ["chrono"] }
+serde = { version = "1.0.136", features = ["derive"] }
+
+[[bin]]
+doc = false
+name = "crdgen"
+path = "src/crdgen.rs"
