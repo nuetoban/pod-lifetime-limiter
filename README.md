@@ -33,7 +33,7 @@ spec:
   maxLifetime: 3600
   selector:
     matchLabels:
-      name: example-pod         
+      name: example-app         
 EOF
 ```
 
@@ -53,6 +53,9 @@ kubectl patch pod YOUR-POD --type json \
           "value": "86400"}]'
 ```
 
+# TODO
+[] Write unit tests
+[] Add ability to set lifetime limit for job
 
 ---
 
