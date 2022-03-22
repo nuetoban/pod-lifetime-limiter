@@ -1,0 +1,9 @@
+apiVersion: de3.me/v1
+kind: PodLifetimeLimit
+metadata:
+  name: example-limit   
+spec:
+  maxLifetime: 3600 # Delete pod every hour
+  selector:
+    matchLabels:
+      name: example-app
