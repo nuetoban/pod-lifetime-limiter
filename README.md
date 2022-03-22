@@ -54,8 +54,8 @@ kubectl patch pod YOUR-POD --type json \
 ```
 
 # TODO
-[] Write unit tests
-[] Add ability to set lifetime limit for job
+- [ ] Write unit tests
+- [ ] Add ability to set lifetime limit for job
 
 ---
 
