@@ -1,8 +1,11 @@
 mod pll;
 
+use apiexts::CustomResourceDefinition;
 use k8s_openapi::api::core::v1::Pod;
+use k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1 as apiexts;
+use kube::core::crd::v1::CustomResourceExt;
 use kube::{
-    api::{Api, DeleteParams, ListParams, ResourceExt},
+    api::{Api, DeleteParams, ListParams, PostParams, ResourceExt},
     Client,
 };
 use std::collections::HashSet;
@@ -83,14 +86,13 @@ async fn find_expired_pods_by_label(
 
 async fn find_expired_pods_by_crd(client: &kube::Client) -> impl Iterator<Item = (String, String)> {
     // Retrieve PorLifetimeLimit resources
-    let plls: Api<manager::PodLifetimeLimit> = Api::all(client.clone());
+    let plls: Api<pll::PodLifetimeLimit> = Api::all(client.clone());
     let list_params = ListParams::default();
     let all_plls = plls.list(&list_params).await.unwrap().into_iter();
 
     // Get all pods with theis labels
     let pods: Api<Pod> = Api::all(client.clone());
-    pods
-        .list(&list_params)
+    pods.list(&list_params)
         .await
         .unwrap()
         .into_iter()
@@ -170,6 +172,23 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
     let client = Client::try_default().await?;
+
+    // Create CRD PodLifetimeLimit
+    let crds: Api<CustomResourceDefinition> = Api::all(client.clone());
+    let pllcrd = pll::PodLifetimeLimit::crd();
+    tracing::info!("Creating PodLifetimeLimit CRD");
+    let pp = PostParams::default();
+    match crds.create(&pp, &pllcrd).await {
+        Ok(o) => {
+            tracing::info!("Created {} ({:?})", o.name(), o.status.unwrap());
+            tracing::debug!("Created CRD: {:?}", o.spec);
+        }
+        Err(kube::Error::Api(ae)) => assert_eq!(ae.code, 409), // if you skipped delete, for instance
+        Err(e) => return Err(e.into()),                        // any other case is probably bad
+    }
+
+    // Wait for the api to catch up
+    sleep(Duration::from_secs(1)).await;
 
     loop {
         let pods_to_delete = find_expired_pods_by_label(&client)
