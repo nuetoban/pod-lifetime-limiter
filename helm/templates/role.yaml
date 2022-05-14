@@ -10,6 +10,9 @@ rules:
 - apiGroups: ["de3.me"]
   resources: ["podlifetimelimits"]
   verbs: ["get", "watch", "list", "delete"]
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["*"]
 
 ---
 
